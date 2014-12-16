@@ -30,6 +30,7 @@
 		            </div>
 		        </g:hasErrors>
 				<g:form class="form-horizontal" action="importarBalanza">
+					<g:hiddenField name="empresa.id" value="${session?.empresa?.id}"/>
 						<f:with bean="${importadorCommand}">
 							<f:field property="ejercicio" 
 								input-class="form-control" />

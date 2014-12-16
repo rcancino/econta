@@ -14,6 +14,23 @@ hibernate {
     flush.mode = 'manual' // OSIV session flush mode outside of transactional context
 }
 
+dataSource_impap{
+  dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+  driverClassName = 'com.mysql.jdbc.Driver'
+  username = 'root'
+  password = 'sys'
+  //url = 'jdbc:mysql://localhost/gasoc'
+  url = 'jdbc:mysql://localhost/impapx'
+  dbCreate = ''
+  readOnly=false
+  pooled = false
+  properties {
+    
+  }
+}
+
+
+
 // environment specific settings
 environments {
     development {
@@ -22,8 +39,8 @@ environments {
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
             pooled = true
             dbCreate="update"
-            //url = "jdbc:mysql://localhost/econta?autoReconnect=true"
-            url="jdbc:mysql://10.10.1.225/econta?autoReconnect=true"
+            url = "jdbc:mysql://localhost/econta?autoReconnect=true"
+            //url="jdbc:mysql://10.10.1.225/econta?autoReconnect=true"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             username = "root"

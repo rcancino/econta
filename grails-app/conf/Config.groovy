@@ -115,6 +115,22 @@ log4j.main = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+    environments{
+        
+      development{
+        info 'grails.app.controllers.com.luxsoft.sw4.econta'
+        info 'grails.app.services.com.luxsoft.sw4.econta'
+        info 'grails.app.jobs'
+      }
+        
+      produccion{
+        error 'grails.app.services'
+        error 'grails.app.controllers'
+        error 'grails.app.services.com.luxsoft.sw4.econt'
+        error 'grails.app.jobs'    
+      }
+        
+    }
 }
 
 
@@ -132,9 +148,10 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/css/**':                     ['permitAll'],
 	'/**/images/**':                  ['permitAll'],
 	'/**/favicon.ico':                ['permitAll'],
-    '/login/**':                      ['permitAll'],
-    '/logout/**':                     ['permitAll'],
-    '/contabilidad/**':                     ["hasAnyRole('OPERADOR','ADMINISTRACION')"],
+  '/login/**':                      ['permitAll'],
+  '/logout/**':                     ['permitAll'],
+  '/contabilidad/**':               ["hasAnyRole('OPERADOR','ADMINISTRACION')"],
+  "/console/**": ['ROLE_ADMIN'],
 ]
 grails.plugin.springsecurity.roleHierarchy = '''
    ADMINISTRACION > OPERADOR
