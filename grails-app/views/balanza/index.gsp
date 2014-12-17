@@ -23,34 +23,52 @@
 	</li>
 </content>
 
+%{-- <content tag="reportes">
+	<g:link action="balanza" >
+	    <i class="fa fa-print"></i> Balanza
+	</g:link>
+</content> --}%
+
 <content tag="document">
 <div class="">
 	<table id="grid" class="table table-striped table-bordered table-condensed">
 
 		<thead>
 			<tr>
-				<th>Empresa</th>
-				<th>Clave</th>
-				<th>Descripción</th>
-				<th>Cuenta SAT</th>
+				<th>Folio</th>
+				<th>Ejercicio</th>
+				<th>Mes</th>
+				<th>Cuentas</th>
+				<th>Estatus</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${cuentaInstanceList}" var="row">
+			<g:each in="${balanzaInstanceList}" var="row">
 				<tr id="${row.id}">
-					<td>${row.empresa.clave}</td>
 					<td>
-						<g:link  action="edit" id="${row.id}">
-							${fieldValue(bean:row,field:"clave")}
+						<g:link  action="show" id="${row.id}">
+							${fieldValue(bean:row,field:"id")}
 						</g:link>
 					</td>
+					<td>${row.ejercicio}</td>	
+					<td>${row.mes}</td>	
+					<td>${row.partidas.size()}</td>	
 					<td>
-						<g:link  action="edit" id="${row.id}">
-							${fieldValue(bean:row,field:"descripcion")}
+						<g:if test="${row.acuse}">
+							<g:link  action="mostrarAcuse" id="${row.id}">
+								ENVIADA
+							</g:link>
+						</g:if>
+						<g:else>
+							REVISION
+						</g:else>
+					</td>
+					<td>
+						<g:link  controller="report" action="balanza" id="${row.id}">
+							<i class="fa fa-print"></i>
 						</g:link>
-					</td>	
-					<td>${fieldValue(bean:row,field:"cuentaSat")}</td>
-					
+					</td>
 				</tr>
 			</g:each>
 		</tbody>

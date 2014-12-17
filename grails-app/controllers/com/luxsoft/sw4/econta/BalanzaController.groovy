@@ -116,6 +116,7 @@ class BalanzaController {
          ]
     }
 
+    @Transactional
     def importarBalanza(ImportadorCommand command){
         if(!command.validate()){
             render view:'importar',model:[importadorCommand:command]
@@ -123,7 +124,8 @@ class BalanzaController {
         }
         def balanza=importadorDeBalanzaService.importar(command.empresa,command.ejercicio,command.mes)
         flash.message="Balanza del $command importada"
-        render view:'show',model:[balanzaInstance:balanza]
+        //render view:'show',model:[balanzaInstance:balanza]
+        redirect action:'index'
 
     }
 

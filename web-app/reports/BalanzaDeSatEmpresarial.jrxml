@@ -39,7 +39,7 @@ JOIN cuenta C ON(C.ID=S.CUENTA_ID)
 JOIN cuenta X ON(X.ID=C.PADRE_ID) 
 JOIN cuenta_sat Y ON(Y.ID=C.cuenta_sat_id)
 JOIN cuenta_sat Z ON(Z.ID=X.cuenta_sat_id)
-WHERE B.ANO=$P{YEAR} AND B.MES=$P{MES} AND B.EMPRESA_ID=$P{EMPRESA_ID}
+WHERE b.EJERCICIO=$P{YEAR} AND b.MES=$P{MES} AND b.EMPRESA_ID=$P{EMPRESA_ID}
 ORDER BY X.CLAVE,C.CLAVE]]></queryString>
 
 	<field name="ID" class="java.lang.Long"/>

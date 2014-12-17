@@ -11,7 +11,7 @@ hibernate {
 //    cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory' // Hibernate 3
     cache.region.factory_class = 'org.hibernate.cache.ehcache.EhCacheRegionFactory' // Hibernate 4
     singleSession = true // configure OSIV singleSession mode
-    flush.mode = 'manual' // OSIV session flush mode outside of transactional context
+    //flush.mode = 'manual' // OSIV session flush mode outside of transactional context
 }
 
 dataSource_impap{
@@ -19,10 +19,10 @@ dataSource_impap{
   driverClassName = 'com.mysql.jdbc.Driver'
   username = 'root'
   password = 'sys'
-  //url = 'jdbc:mysql://localhost/gasoc'
-  url = 'jdbc:mysql://localhost/impapx'
+  //url = 'jdbc:mysql://localhost/impapx'
+  url = 'jdbc:mysql://10.10.1.227/impapx'
   dbCreate = ''
-  readOnly=false
+  readOnly=true
   pooled = false
   properties {
     

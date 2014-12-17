@@ -12,7 +12,28 @@
 <content tag="header">
 	<h3>Catálogo de cuentas</h3>
 </content>
-<content tag="operaciones"></content>
+<content tag="operaciones">
+	<li>
+    	<g:link action="create" >
+        	<i class="fa fa-plus"></i> Nuevo
+        </g:link>
+	</li>
+	<li><g:link action="generarXml" class="">
+  				<i class="fa fa-file-code-o"></i></span> Generar XML 
+  		</g:link>
+  	</li>
+  	<li>
+  		<g:link action="registrarAcuse" class="">
+  			<i class="fa fa-file-text-o"></i></span> Acuse
+  		</g:link>
+  	</li>
+</content>
+
+<content tag="reportes">
+	<li>
+		<g:link controller="report" action="catalogoDecuentas" id="${session.empresa.id}"> Catálogo</g:link>
+	</li>
+</content>
 
 <content tag="document">
 <div class="">
