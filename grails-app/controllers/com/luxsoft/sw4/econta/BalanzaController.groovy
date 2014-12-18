@@ -8,6 +8,7 @@ import org.springframework.security.access.annotation.Secured
 import groovy.sql.Sql
 import org.springframework.jdbc.datasource.SingleConnectionDataSource
 import com.luxsoft.sw4.Empresa
+import mx.luxsoft.econta.x1.BalanzaDocument
 
 @Secured(["hasAnyRole('OPERADOR','ADMINISTRACION')"])
 @Transactional(readOnly = true)
@@ -16,6 +17,8 @@ class BalanzaController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def importadorDeBalanzaService
+
+    def balanzaService
 
     def index(Integer max) {
         params.max = Math.min(max ?: 100, 500)
@@ -137,6 +140,32 @@ class BalanzaController {
             }
             '*'{ render status: NOT_FOUND }
         }
+    }
+
+    @Transactional
+    def generarXml(Balanza balanza){
+        balanza=balanzaService.generarXml(balanza)
+        flash.message="XML Generado exitosamente"
+        redirect action:'show',params:[id:balanza.id]
+    }
+
+    def mostrarXml(Balanza balanza){
+        if(balanza.xml){
+            BalanzaDocument document=BalanzaBuilder.cargar(balanza);
+            render(text: document.xmlText(), contentType: "text/xml", encoding: "UTF-8")
+        }else{
+            flash.message="No se ha generado el XML "
+            redirect action:'show',params:[id:balanza.id]
+        }
+    }
+
+    def descargarXml(Balanza balanza){
+         log.info 'Descargando archivo xml: '+balanza.id
+        response.setContentType("application/octet-stream")
+        String name="Balanza_"+"$balanza.empresa.clave"+"_$balanza.ejercicio"+"_$balanza.mes"+".xml"
+        response.setHeader("Content-disposition", "filename=$name")
+        response.outputStream << balanza.xml
+        return
     }
 }
 

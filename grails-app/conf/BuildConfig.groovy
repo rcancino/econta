@@ -56,6 +56,7 @@ grails.project.dependency.resolution = {
         build('org.grails:grails-docs:2.4.3') {
             excludes 'itext'
         }
+        compile 'org.apache.xmlbeans:xmlbeans:2.4.0'
     }
 
     plugins {

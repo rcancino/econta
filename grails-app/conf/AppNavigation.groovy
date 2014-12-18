@@ -28,7 +28,7 @@ navigation={
 			empresas(controller:'empresa',action:'index')
 			cuentasSat(controller:'cuentaSat',action:'index')
 			cuentasContables(controller:'cuenta',action:'index')
-			
+			bitacoras(controller:'catalogoLog',action:'index',titleText:'Bitácora de envios')
 		}
 		contabilidad(controller:'balanza',action:'index'){
 			balanza(controller:'balanza',action:'index')

@@ -8,7 +8,7 @@ import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
 import org.apache.commons.lang.WordUtils
 import org.grails.databinding.BindingFormat
 
-import com.luxsoft.sw4.*
+import com.luxsoft.sw4.Empresa
 
 
 
@@ -82,7 +82,7 @@ class ReportController {
 	
 	
 }
-
+/*
 class ReportCommand{
 	String reportName
 	static constraints={
@@ -100,7 +100,7 @@ class FechaCommand extends ReportCommand{
 		fecha nullable:false
 	}
 }
-
+*/
 /*
 @Validateable 
 class PeriodoCommand extends ReportCommand{

@@ -8,6 +8,8 @@
 
 	<content tag="header">
 		<h3>Balanza ${balanzaInstance.empresa}  (${balanzaInstance.ejercicio} / ${balanzaInstance.mes})</h3>
+		<h5>Estatus : ${balanzaInstance.acuse?'XML ENVIADO':'REVISION'} </h5>
+		<h5>Xml: ${balanzaInstance.xml?'GENERADO':'PENDIENTE'} </h5>
 	</content>
 	
 	<content tag="operaciones">
@@ -16,10 +18,23 @@
   					<span class="glyphicon glyphicon-arrow-left"></span> Balanzas
   			    </g:link>
   			</li>
-  			<li><g:link action="generarXml" class="">
-  					<i class="fa fa-file-code-o"></i></span> Generar XML 
+  			<li><g:link action="generarXml" id="${balanzaInstance.id}">
+  					<i class="fa fa-file-code-o"></i> Generar XML 
   			    </g:link>
   			</li>
+  			<g:if test="${balanzaInstance.xml}">
+
+  				<li><g:link action="descargarXml" id="${balanzaInstance.id}">
+  						<i class="fa fa-download"></i> Descargar XML 
+  				    </g:link>
+  				</li>
+  				<li><g:link action="mostrarXml" id="${balanzaInstance.id}">
+  						<i class="fa fa-desktop"></i> Mostrar XML 
+  				    </g:link>
+  				</li>
+  			</g:if>
+	
+  			
 
   			<li><g:link action="registrarAcuse" class="">
   					<i class="fa fa-file-text-o"></i></span> Acuse

@@ -6,28 +6,31 @@
 	<meta name="layout" content="catalogos"/>
 	<asset:stylesheet src="datatables/dataTables.css"/>
 	<asset:javascript src="datatables/dataTables.js"/> 
-	<title>Cuentas contables</title>
+	<title>Bitácora de envíos</title>
 </head>
 <body>
 <content tag="header">
 	<h3>Catálogo de cuentas ${session.empresa}  Ejercicio:${session.ejercicio}</h3>
 </content>
 <content tag="operaciones">
-	<li>
-    	<g:link action="create" >
-        	<i class="fa fa-plus"></i> Nuevo
-        </g:link>
-	</li>
+	
 	<li><g:link controller="exportador" action="exportarCatalogoDeCuentas" id="${session.empresa.id}">
   				<i class="fa fa-file-code-o"></i></span> Generar XML 
   		</g:link>
   	</li>
-  	
+  	<li>
+  		<g:link action="registrarAcuse" class="">
+  			<i class="fa fa-file-text-o"></i></span> Acuse
+  		</g:link>
+  	</li>
 </content>
 
 <content tag="reportes">
 	<li>
-		<g:link controller="report" action="catalogoDecuentas" id="${session.empresa.id}"> Catálogo</g:link>
+		<g:link controller="report" action="catalogoDecuentas" id="${session.empresa.id}"> Bitacora</g:link>
+	</li>
+	<li>
+		<g:link controller="report" action="catalogoDecuentas" id="${session.empresa.id}"> XML</g:link>
 	</li>
 </content>
 
@@ -38,27 +41,41 @@
 		<thead>
 			<tr>
 				<th>Empresa</th>
-				<th>Clave</th>
-				<th>Descripción</th>
-				<th>Cuenta SAT</th>
+				<th>Ejercicio</th>
+				<th>Mes</th>
+				<th>Acuse SAT</th>
+				<th>Desc</th>
+				<th>Ver</th>
+				<th>Creado</th>
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${cuentaInstanceList}" var="row">
+			<g:each in="${catalogoLogInstanceList}" var="row">
 				<tr id="${row.id}">
 					<td>${row.empresa.clave}</td>
+					<td>${row.ejercicio}</td>
+					<td>${row.mes}</td>
 					<td>
-						<g:link  action="edit" id="${row.id}">
-							${fieldValue(bean:row,field:"clave")}
-						</g:link>
+						<g:if test="${row.acuse}">
+							<g:link  action="descargarAcuse" id="${row.id}">
+								Descargar
+							</g:link>
+						</g:if>
+						<g:else>
+							<a href="#uploadAcuseDialog" data-toggle="modal">Cargar</a>
+						</g:else>
 					</td>
 					<td>
-						<g:link  action="edit" id="${row.id}">
-							${fieldValue(bean:row,field:"descripcion")}
+						<g:link action="descargarXml" id="${row.id}">
+							<i class="fa fa-download"></i>
 						</g:link>
 					</td>	
-					<td>${fieldValue(bean:row,field:"cuentaSat")}</td>
-					
+					<td>
+						<g:link action="mostrarXml" id="${row.id}">
+							<i class="fa fa-file-code-o"></i>
+						</g:link>
+					</td>
+					<td>${g.formatDate(date:row.dateCreated,format:'dd/MM/yyyy HH:mm')}</td>	
 				</tr>
 			</g:each>
 		</tbody>
@@ -70,6 +87,7 @@
 </content><!-- End content document -->
 
 <content tag="searchForm">
+	<g:render template="uploadFileDialog"/>
 	%{-- <g:render template="search"/> --}%
 </content>
 <content tag="javascript">

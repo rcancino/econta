@@ -6,10 +6,13 @@ class CoreFilters {
         all(controller:'*', action:'*') {
             before = {
                 if(!session.ejercicion){
-                    //session.ejercicio=Periodo.obtenerYear(new Date())
+                    session.ejercicio=Periodo.obtenerYear(new Date())
                 }
                 if(!session.empresa){
                     flash.message="Seleccion una empresa"
+                }
+                if(!session.mes){
+                    session.mes=Periodo.obtenerMes(new Date())
                 }
             }
             after = { Map model ->
