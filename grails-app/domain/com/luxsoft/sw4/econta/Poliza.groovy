@@ -14,7 +14,13 @@ class Poliza {
 
 	static belongsTo = [polizas: Polizas]
 
+	static hasMany = [partidas: PolizaDet]
+
     static constraints = {
     	concepto size:1..300
     }
+
+    static mapping = {
+		partidas cascade: "all-delete-orphan"
+	}
 }
