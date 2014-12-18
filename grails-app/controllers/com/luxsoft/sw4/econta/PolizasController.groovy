@@ -22,8 +22,12 @@ class PolizasController {
         respond Polizas.list(params), model:[polizasInstanceCount: Polizas.count()]
     }
 
+
     def show(Polizas polizasInstance){
-    	
+        def partidas=polizasInstance.partidas.sort{it.fecha}
+        partidas=partidas.sort{it.tipo}
+        partidas=partidas.sort{it.num}
+    	[polizasInstance:polizasInstance,polizaInstanceList:partidas]
     }
 
     
@@ -46,5 +50,9 @@ class PolizasController {
         //render view:'show',model:[balanzaInstance:balanza]
         redirect action:'index'
 
+    }
+
+    def showPoliza(Poliza poliza){
+        [polizaInstance:poliza]
     }
 }

@@ -4,9 +4,12 @@ class Poliza {
 
 	
 	Integer tipo
+	String num
 	String descripcion
 	Date fecha
 	String concepto
+	Long origen
+	String tipoOrigen
 
 
 	Date dateCreated
@@ -18,6 +21,7 @@ class Poliza {
 
     static constraints = {
     	concepto size:1..300
+    	origen nullable:true
     }
 
     static mapping = {
