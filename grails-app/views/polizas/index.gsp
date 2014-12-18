@@ -6,17 +6,14 @@
 	<meta name="layout" content="contabilidad"/>
 	<asset:stylesheet src="datatables/dataTables.css"/>
 	<asset:javascript src="datatables/dataTables.js"/> 
-	<title>Balanza</title>
+	<title>Polizas</title>
 </head>
 <body>
 <content tag="header">
-	<h3>Balanzas de comprobacion para ${session.empresa}</h3>
+	<h3>Pólizas importadas  de: ${session.empresa}</h3>
 </content>
 <content tag="operaciones">
 	<li>
-	    <g:link action="create" >
-	        <i class="fa fa-plus"></i> Nuevo
-	    </g:link>
 	    <g:link action="importar" >
 	        <i class="fa fa-external-link-square"></i> Importar
 	    </g:link>
@@ -38,13 +35,13 @@
 				<th>Folio</th>
 				<th>Ejercicio</th>
 				<th>Mes</th>
-				<th>Cuentas</th>
 				<th>Estatus</th>
 				<th></th>
+				<th>XML</th>
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${balanzaInstanceList}" var="row">
+			<g:each in="${polizasInstanceList}" var="row">
 				<tr id="${row.id}">
 					<td>
 						<g:link  action="show" id="${row.id}">
@@ -53,7 +50,6 @@
 					</td>
 					<td>${row.ejercicio}</td>	
 					<td>${row.mes}</td>	
-					<td>${row.partidas.size()}</td>	
 					<td>
 						<g:if test="${row.acuse}">
 							<g:link  action="mostrarAcuse" id="${row.id}">
@@ -69,12 +65,22 @@
 							<i class="fa fa-print"></i>
 						</g:link>
 					</td>
+					<td>
+						<g:if test="${row.xml}">
+							<g:link  action="descargarXml" id="${row.id}">
+								<i class="fa fa-download"></i>
+							</g:link>
+						</g:if>
+						<g:else>
+							PENDIENTE
+						</g:else>
+					</td>
 				</tr>
 			</g:each>
 		</tbody>
 	</table>
 	<div class="pagination">
-		<g:paginate total="${balanzaInstanceCount ?: 0}"/>
+		<g:paginate total="${polizasInstanceCount ?: 0}"/>
 	</div>
 </div>
 </content><!-- End content document -->

@@ -32,7 +32,7 @@ navigation={
 		}
 		contabilidad(controller:'balanza',action:'index'){
 			balanza(controller:'balanza',action:'index')
-			polizas()
+			polizas(controller:'polizas',action:'index')
 		}
 		operaciones()
 		//configuracion()
