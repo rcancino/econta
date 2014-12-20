@@ -7,6 +7,7 @@ import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat
 import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
 import org.apache.commons.lang.WordUtils
 import org.grails.databinding.BindingFormat
+import org.apache.commons.lang.math.NumberUtils
 
 import com.luxsoft.sw4.Empresa
 
@@ -39,6 +40,16 @@ class ReportController {
 		def repParams=[:]
 		repParams['EMPRESA_ID']=empresa.id
 		repParams.reportName='CatalogoDeCuentasEmpresarialSatl'
+		ByteArrayOutputStream  pdfStream=runReport(repParams)
+		render(file: pdfStream.toByteArray(), contentType: 'application/pdf'
+			,fileName:repParams.reportName)
+	}
+
+	def poliza(Poliza poliza){
+		def repParams=[:]
+		repParams['ID']=poliza.id
+		
+		repParams.reportName='PolizaSatEmpresarial'
 		ByteArrayOutputStream  pdfStream=runReport(repParams)
 		render(file: pdfStream.toByteArray(), contentType: 'application/pdf'
 			,fileName:repParams.reportName)

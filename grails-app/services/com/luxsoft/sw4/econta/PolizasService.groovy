@@ -94,7 +94,7 @@ class PolizasService {
     """
 
     def polizaImpapSqlDet="""
-        SELECT D.id,D.cuenta_id,C.clave as numCta,C.descripcion as concepto,D.debe as debe
+        SELECT D.id,D.cuenta_id,C.clave as numCta,d.descripcion as concepto,D.debe as debe
             ,D.haber as haber,'MXN' AS moneda,1 as tipCambio
             ,D.poliza_id,d.entidad
             ,d.referencia

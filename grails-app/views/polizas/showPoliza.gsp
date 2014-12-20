@@ -25,7 +25,7 @@
 
 	<content tag="reportes">
 		<li>
-			<g:link controller="report" action="reporteDePoliza" id="${polizaInstance.id}">
+			<g:link controller="report" action="poliza" id="${polizaInstance.id}">
   				<span class="glyphicon glyphicon-print"></span> Poliza
   			</g:link>
   		</li>

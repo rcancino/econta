@@ -36,7 +36,6 @@
 				<th>Ejercicio</th>
 				<th>Mes</th>
 				<th>Estatus</th>
-				<th></th>
 				<th>XML</th>
 			</tr>
 		</thead>
@@ -60,11 +59,7 @@
 							REVISION
 						</g:else>
 					</td>
-					<td>
-						<g:link  controller="report" action="balanza" id="${row.id}">
-							<i class="fa fa-print"></i>
-						</g:link>
-					</td>
+					
 					<td>
 						<g:if test="${row.xml}">
 							<g:link  action="descargarXml" id="${row.id}">
