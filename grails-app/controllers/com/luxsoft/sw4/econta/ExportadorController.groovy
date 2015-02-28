@@ -43,16 +43,17 @@ class ExportadorController {
     		Ctas ctas=catalogo.addNewCtas()
 			ctas.setCodAgrup(c?.cuentaSat?.codigo)
 			ctas.setNumCta(c.clave)
-			ctas.setSubCtaDe(c.descripcion)
+			ctas.setDesc(c.descripcion)
 			ctas.setNivel(1)
 			ctas.setNatur(c.naturaleza=='DEUDORA'?'D':'A')
-			c.subCuentas.each{
+			c.subCuentas.each{ c2->
 				Ctas ctas2=catalogo.addNewCtas()
-				ctas2.setCodAgrup(c?.cuentaSat?.codigo)
-				ctas2.setNumCta(c.clave)
-				ctas2.setSubCtaDe(c.descripcion)
+				ctas2.setCodAgrup(c2?.cuentaSat?.codigo)
+				ctas2.setNumCta(c2.clave)
+				ctas2.setDesc(c2.descripcion)
+				ctas2.setSubCtaDe(c2.padre.clave)
 				ctas2.setNivel(2)
-				ctas2.setNatur(c.naturaleza=='DEUDORA'?'D':'A')
+				ctas2.setNatur(c2.naturaleza=='DEUDORA'?'D':'A')
 			}
     	}
 
