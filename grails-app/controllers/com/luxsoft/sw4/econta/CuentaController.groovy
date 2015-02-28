@@ -14,6 +14,8 @@ class CuentaController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    def importadorDeCuentasService
+
     def index(Integer max) {
         params.max = Math.min(max ?: 1000, 1000)
         def query=Cuenta.where {
@@ -163,6 +165,15 @@ class CuentaController {
         cta.save failOnError:true
         flash.message="Sub cuenta agregada: "+cta.clave
         redirect action:'edit',params:[id:cta.id]
+    }
+
+    @Transactional
+    def importar(){
+        def file=grailsApplication.mainContext.getResource("/WEB-INF/data/CuentasContablesPapelSA.csv").file
+        importadorDeCuentasService.importar(file,session.empresa)
+        flash.message="Cuentas importadas"
+        redirect action:'index'
+
     }
 
 

@@ -18,6 +18,10 @@
         	<i class="fa fa-plus"></i> Nuevo
         </g:link>
 	</li>
+	<li><g:link  action="importar" >
+  				<i class="fa fa-file-upload"></i></span> Importar 
+  		</g:link>
+  	</li>
 	<li><g:link controller="exportador" action="exportarCatalogoDeCuentas" id="${session.empresa.id}">
   				<i class="fa fa-file-code-o"></i></span> Generar XML 
   		</g:link>
