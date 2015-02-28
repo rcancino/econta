@@ -21,8 +21,13 @@ class BalanzaController {
     def balanzaService
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 100, 500)
-        respond Balanza.list(params), model:[balanzaInstanceCount: Balanza.count()]
+        //params.max = Math.min(max ?: 100, 500)
+        //respond Balanza.list(params), model:[balanzaInstanceCount: Balanza.count()]
+        params.max = Math.min(max ?: 1000, 1000)
+        def query=Balanza.where {
+            empresa==session.empresa
+        }
+        respond query.list(params), model:[cuentaInstanceCount: query.count()]
     }
 
     def show(Balanza balanzaInstance) {

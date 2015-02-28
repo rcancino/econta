@@ -18,6 +18,9 @@ class ImportadorDeBalanzaService {
     		case 'IMPAP':
     			importarImpap(empresa,ejercicio,mes)
     			break
+            case 'PAPEL'
+                importarBalanzaDePapel(empresa,ejercicio,mes)
+                break
     		default:
     			break
     	}
@@ -73,6 +76,10 @@ class ImportadorDeBalanzaService {
 		FROM saldo_por_cuenta_contable S JOIN cuenta_contable C ON(S.cuenta_id=C.ID) 				
 		WHERE YEAR=? AND MES=? AND S.CUENTA_ID NOT IN(29,33,168,167,254,255,40,228,229,230,231,232,233,234,41,235,236,237,238,239,240,241,42,242,243,244,43,245,246,247,308)				
     """
+
+    def importarBalanzaDePapel(Empresa empresa,Integer ejercicio,Integer mes){
+        def file=grailsApplication.mainContext.getResource("/WEB-INF/data/BalanzaDeComprobacionPapelSAEne15.csv").file
+    }
 }
 
 class BalanzaException extends RuntimeException{
