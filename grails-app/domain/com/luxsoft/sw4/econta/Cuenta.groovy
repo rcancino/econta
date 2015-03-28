@@ -38,7 +38,7 @@ class Cuenta {
 	static hasMany = [subCuentas:Cuenta]
 
     static constraints = {
-		clave nullable:true,maxSize:100 ,unique:['empresa','descripcion']
+		clave nullable:true,maxSize:100 //,unique:['empresa','descripcion']
 		descripcion(blank:false,maxSize:300)
 		detalle(nullable:false)
 		tipo(nullable:false,inList:['ACTIVO','PASIVO','CAPITAL','ORDEN'])

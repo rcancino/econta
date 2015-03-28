@@ -21,7 +21,7 @@ class ImportadorDeCuentasService {
     	def origen=1
     	// Cargar cuentas de mayor
 
-    	file.getInputStream().eachLine('UTF-8'){line,row ->
+    	file.getInputStream().eachLine('ISO-8859-1'){line,row ->
     		if(row>1){
     			
     			def fields=line.split(";")
@@ -44,7 +44,7 @@ class ImportadorDeCuentasService {
     			}
     		}
     	}
-        file.getInputStream().eachLine('UTF-8'){line,row ->
+        file.getInputStream().eachLine('ISO-8859-1'){line,row ->
     	//file.eachLine{line,row ->
     		if(row>1){
     			def fields=line.split(";")
