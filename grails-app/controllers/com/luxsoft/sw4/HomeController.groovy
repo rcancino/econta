@@ -11,4 +11,12 @@ class HomeController {
     def catalogos(){
 
     }
+
+    /*
+    def seleccionarEmpresa(){
+         def origin=request.getHeader('referer')
+         session.periodo=command
+         redirect(uri: request.getHeader('referer') )
+    }
+    */
 }

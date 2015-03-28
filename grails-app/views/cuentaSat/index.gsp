@@ -23,7 +23,7 @@
 				<th>Código</th>
 				<th>Nombre</th>
 				<th>Tipo</th>
-				
+				<th>Nivel</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -32,6 +32,7 @@
 					<td >${fieldValue(bean:row,field:"codigo")}</td>
 					<td >${fieldValue(bean:row,field:"nombre")}</td>
 					<td >${fieldValue(bean:row,field:"tipo")}</td>
+					<td>${formatNumber(number:"${row.nivel}", format:'###')}</td>
 				</tr>
 			</g:each>
 		</tbody>

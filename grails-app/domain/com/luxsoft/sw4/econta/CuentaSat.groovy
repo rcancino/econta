@@ -8,12 +8,12 @@ class CuentaSat {
 	String codigo
 	String nombre
 	String tipo
+    Integer nivel
 	
 
     static constraints = {
     	codigo nullable:false,unique:true,maxSize:20
     	tipo maxSize:100
-    	
     }
     
 

@@ -9,6 +9,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 class Cuenta {
 	
 	Empresa empresa
+	
+	Integer mes
+	Integer ejercicio
+
 	String clave
 	String descripcion
 	String tipo
@@ -34,7 +38,7 @@ class Cuenta {
 	static hasMany = [subCuentas:Cuenta]
 
     static constraints = {
-		clave nullable:true,maxSize:100,unique:'empresa'
+		clave nullable:true,maxSize:100 ,unique:['empresa','descripcion']
 		descripcion(blank:false,maxSize:300)
 		detalle(nullable:false)
 		tipo(nullable:false,inList:['ACTIVO','PASIVO','CAPITAL','ORDEN'])
@@ -42,6 +46,8 @@ class Cuenta {
 		naturaleza(inList:['DEUDORA','ACREEDORA','MIXTA'])
 		cuentaSat nullable:true
 		nivel range:1..5
+		mes range:1..12
+    	ejercicio range:2014..2099
     }
 	
 	static mapping ={

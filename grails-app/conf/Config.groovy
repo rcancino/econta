@@ -151,7 +151,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
   '/login/**':                      ['permitAll'],
   '/logout/**':                     ['permitAll'],
   '/contabilidad/**':               ["hasAnyRole('OPERADOR','ADMINISTRACION')"],
-  "/console/**":                    ["hasAnyRole('ADMIN')"]
+  "/console/**":                    ["hasAnyRole('ADMIN')"],
+  "/plugins/console*/**":           ["hasAnyRole('ADMIN')"],
 ]
 grails.plugin.springsecurity.roleHierarchy = '''
    ADMINISTRACION > OPERADOR

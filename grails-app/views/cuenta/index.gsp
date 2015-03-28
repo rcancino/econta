@@ -18,11 +18,15 @@
         	<i class="fa fa-plus"></i> Nuevo
         </g:link>
 	</li>
-	<li><g:link  action="importar" >
-  				<i class="fa fa-file-upload"></i></span> Importar 
-  		</g:link>
+	<li>
+		<a href="#uploadFileDialog" data-toggle="modal">
+			<i class="fa fa-file-upload"></i></span> Importar 
+		</a>
+		%{-- <g:link  action="importar" >
+  				
+  		</g:link> --}%
   	</li>
-	<li><g:link controller="exportador" action="exportarCatalogoDeCuentas" id="${session.empresa.id}">
+	<li><g:link controller="exportador" action="exportarCatalogoDeCuentas" id="${session?.empresa?.id}">
   				<i class="fa fa-file-code-o"></i></span> Generar XML 
   		</g:link>
   	</li>
@@ -31,7 +35,7 @@
 
 <content tag="reportes">
 	<li>
-		<g:link controller="report" action="catalogoDecuentas" id="${session.empresa.id}"> Catálogo</g:link>
+		<g:link controller="report" action="catalogoDecuentas" id="${session?.empresa?.id}"> Catálogo</g:link>
 	</li>
 </content>
 
@@ -41,7 +45,7 @@
 
 		<thead>
 			<tr>
-				<th>Empresa</th>
+				<th>Mes</th>
 				<th>Clave</th>
 				<th>Descripción</th>
 				<th>Cuenta SAT</th>
@@ -49,8 +53,9 @@
 		</thead>
 		<tbody>
 			<g:each in="${cuentaInstanceList}" var="row">
-				<tr id="${row.id}">
-					<td>${row.empresa.clave}</td>
+				<tr id="${row.id}" class="${row.cuentaSat==null?'danger':''}">
+					
+					<td>${row.mes}</td>
 					<td>
 						<g:link  action="edit" id="${row.id}">
 							${fieldValue(bean:row,field:"clave")}
@@ -70,6 +75,7 @@
 	<div class="pagination">
 		<g:paginate total="${cuentaInstanceCount ?: 0}"/>
 	</div>
+	<g:render template="/common/uploadFile"/>
 </div>
 </content><!-- End content document -->
 

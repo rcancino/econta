@@ -1,8 +1,13 @@
 package com.luxsoft.sw4.econta
 import org.springframework.security.access.annotation.Secured
 import grails.transaction.Transactional
-import mx.luxsoft.econta.x1.CatalogoDocument
+//import mx.luxsoft.econta.x1.CatalogoDocument
 import org.apache.xmlbeans.XmlOptions
+
+import mx.gob.sat.esquemas.contabilidadE.x11.catalogoCuentas.CatalogoDocument
+import mx.gob.sat.esquemas.contabilidadE.x11.catalogoCuentas.CatalogoDocument.Catalogo
+import mx.gob.sat.esquemas.contabilidadE.x11.catalogoCuentas.CatalogoDocument.Catalogo.Mes
+
 
 @Secured(["hasAnyRole('OPERADOR','ADMINISTRACION')"])	
 @Transactional
@@ -18,16 +23,24 @@ class CatalogoLogController {
     	[catalogoLogInstanceList:catalogoLogInstanceList]
     }
 
-     def mostrarXml(CatalogoLog log){
+    def mostrarXml(CatalogoLog log){
+        ByteArrayInputStream is=new ByteArrayInputStream(log.getXml())
+        CatalogoDocument document=CatalogoDocument.Factory.parse(is)
+        render(text: document.xmlText(), contentType: "text/xml", encoding: "UTF-8")
+    }
+    /*
+     def mostrarXml2(CatalogoLog log){
         ByteArrayInputStream is=new ByteArrayInputStream(log.getXml())
         CatalogoDocument document=CatalogoDocument.Factory.parse(is)
 		render(text: document.xmlText(), contentType: "text/xml", encoding: "UTF-8")
     }
+    */
 
     def descargarXml(CatalogoLog log){
         this.log.info 'Descargando archivo xml de catalogo de cuentas: '+log.id
         response.setContentType("application/octet-stream")
-        String name="Catalogo_"+"$log.empresa.clave"+"_$log.ejercicio"+"_$log.mes"+".xml"
+        String mes=org.apache.commons.lang.StringUtils.leftPad(log.mes.toString(),2,'0')
+        String name="$log.empresa.rfc"+"$log.ejercicio"+mes+"CT.xml"
         response.setHeader("Content-disposition", "filename=$name")
         response.outputStream << log.xml
         return

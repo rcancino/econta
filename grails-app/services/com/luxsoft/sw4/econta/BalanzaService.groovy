@@ -3,7 +3,8 @@ package com.luxsoft.sw4.econta
 import grails.transaction.Transactional
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlOptions;
-import mx.luxsoft.econta.x1.BalanzaDocument;
+
+import mx.gob.sat.esquemas.contabilidadE.x11.balanzaComprobacion.BalanzaDocument;
 
 
 @Transactional

@@ -9,7 +9,7 @@ import grails.validation.Validateable
 import org.springframework.security.access.annotation.Secured
 
 @Secured(["hasAnyRole('OPERADOR','ADMINISTRACION')"])
-@Transactional(readOnly = true)
+@Transactional
 class CuentaController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -176,6 +176,22 @@ class CuentaController {
 
     }
 
+    def uploadFile(){
+        def file=request.getFile('file')
+        def user=getAuthenticatedUser().username
+        assert session.empresa,'Debe seleccionar una empresa'
+        if (file.empty) {
+            flash.message = 'Archivo  incorrecto (archivo vacío)'
+            redirect action:'index'
+            return
+        }
+        def ejercicio=session.ejercicio
+        def mes=1
+        importadorDeCuentasService.importar(file,session.empresa,ejercicio,mes)
+        flash.message="Cuentas importadas"
+        redirect action:'index'
+    }
+
 
 }
 
@@ -185,5 +201,10 @@ class SubCuentaCommand{
     String clave
     String descripcion
     CuentaSat cuentaSat
+
+}
+
+@Validateable
+class CuentaCommand{
 
 }

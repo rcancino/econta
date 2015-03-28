@@ -4,6 +4,7 @@ import mx.luxsoft.econta.x1.CatalogoDocument
 
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlOptions;
+
 import mx.luxsoft.econta.x1.CatalogoDocument;
 import mx.luxsoft.econta.x1.CatalogoDocument.Catalogo;
 import mx.luxsoft.econta.x1.CatalogoDocument.Catalogo.Mes;
@@ -13,18 +14,38 @@ import mx.luxsoft.econta.x1.BalanzaDocument;
 import com.luxsoft.sw4.Empresa
 import org.springframework.security.access.annotation.Secured
 import grails.transaction.Transactional
+import groovy.xml.XmlUtil
 
 @Secured(["hasAnyRole('OPERADOR','ADMINISTRACION')"])	
 @Transactional
 class ExportadorController {
 
 	
+	def catalogoDeCuentasBuilder
+
+
+	def exportarCatalogoDeCuentas(Empresa empresa){
+
+		//assert catalogoDeCuentasBuilder,'No se registro el CatalogoDeCuentasBuilder'
+		def mes=1
+    	def ejercicio=session.ejercicio
+		def documento=catalogoDeCuentasBuilder.build(empresa,ejercicio,mes)
+		
+		CatalogoLog log=new CatalogoLog(empresa:empresa,ejercicio:ejercicio,mes:mes)
+		ByteArrayOutputStream os=new ByteArrayOutputStream()
+		documento.save(os, getOptions())
+		log.xml=os.toByteArray()
+		log.save failOnError:true
+    	redirect controller:'catalogoLog',action:'index'
+
+	}
+	
 
 	/**
 	* Genera el archivo XML del catalogo de cuentas
 	*
 	*/
-    def exportarCatalogoDeCuentas(Empresa empresa) {
+    def exportarCatalogoDeCuentasOld(Empresa empresa) {
     	
     	def cuentas=Cuenta.findAllByEmpresa(empresa)
     	def mes=getMes(session.mes+1)
@@ -43,14 +64,14 @@ class ExportadorController {
     		Ctas ctas=catalogo.addNewCtas()
 			ctas.setCodAgrup(c?.cuentaSat?.codigo)
 			ctas.setNumCta(c.clave)
-			ctas.setDesc(c.descripcion)
+			ctas.setDesc(XmlUtil.escapeXml(c.descripcion))
 			ctas.setNivel(1)
 			ctas.setNatur(c.naturaleza=='DEUDORA'?'D':'A')
 			c.subCuentas.each{ c2->
 				Ctas ctas2=catalogo.addNewCtas()
 				ctas2.setCodAgrup(c2?.cuentaSat?.codigo)
 				ctas2.setNumCta(c2.clave)
-				ctas2.setDesc(c2.descripcion)
+				ctas2.setDesc(XmlUtil.escapeXml(c.descripcion))
 				ctas2.setSubCtaDe(c2.padre.clave)
 				ctas2.setNivel(2)
 				ctas2.setNatur(c2.naturaleza=='DEUDORA'?'D':'A')
@@ -110,6 +131,8 @@ class ExportadorController {
 		options.put(XmlOptions.SAVE_NAMESPACES_FIRST);
 		return options;
 	}
+
+	
 
 	
 }

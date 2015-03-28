@@ -52,6 +52,18 @@
 				    		</div>
 
 				    		<div class="form-group">
+				    			<label for="password" class="col-sm-3 control-label">
+				    				Empresa
+				    			</label>
+				    			<div class="col-sm-9">
+				    				<g:select name="empresaId" class="form-control"
+				    				          from="${com.luxsoft.sw4.Empresa.list()}"
+				    				          
+				    				          optionKey="id" />
+				    			</div>
+				    		</div>
+
+				    		<div class="form-group">
 				    			<div class="col-sm-offset-3 col-sm-9">
 				    				<div class="checkbox">
 				    					<label >
