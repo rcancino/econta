@@ -19,7 +19,7 @@ class Balanza {
 	static hasMany = [partidas: BalanzaDet]
 
     static constraints = {
-    	versionSat inList:['1.0']
+    	versionSat inList:['1.1']
     	//rfc matches:"[A-ZÑ&]{3,4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z0-9]?[A-Z0-9]?[0-9A-Z]?"
     	rfc size:12..13
     	mes inList:['01','02','03','04','05','06','07','08','09','10','11','12']
