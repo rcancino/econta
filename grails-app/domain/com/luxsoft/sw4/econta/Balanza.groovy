@@ -12,9 +12,12 @@ class Balanza {
 	Integer ejercicio
 	byte[] acuse
 	byte[] xml
+	String tipo='N'
 
 	Date dateCreated
 	Date lastUpdated
+
+	List partidas
 
 	static hasMany = [partidas: BalanzaDet]
 
@@ -24,6 +27,7 @@ class Balanza {
     	rfc size:12..13
     	mes inList:['01','02','03','04','05','06','07','08','09','10','11','12']
     	ejercicio range:2014..2099
+    	tipo inList:['N','C']
     	acuse nullable:true,maxSize:(1024 * 512)  // 50kb para almacenar el acuse
     	xml nullable:true,maxSize:(1024 * 512)  // 50kb para almacenar el xml
     }
