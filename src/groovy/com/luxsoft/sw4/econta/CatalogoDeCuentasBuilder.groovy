@@ -9,9 +9,20 @@ import com.luxsoft.sw4.Empresa
 import groovy.xml.XmlUtil
 import javax.xml.namespace.QName
 import org.apache.xmlbeans.XmlCursor
+import org.apache.xmlbeans.XmlValidationError
+import org.apache.xmlbeans.XmlOptions
+import org.apache.xmlbeans.XmlObject
+import org.bouncycastle.util.encoders.Base64
+import org.apache.commons.logging.LogFactory
+
 
 class CatalogoDeCuentasBuilder{
 
+	def selladorDigital
+
+	def cadenaBuilder
+
+	private static final log=LogFactory.getLog(this)
 
 	def build(Empresa empresa,Integer ejercicio,Integer mes){
 		CatalogoDocument documento=CatalogoDocument.Factory.newInstance();
@@ -46,9 +57,20 @@ class CatalogoDeCuentasBuilder{
 				}
 				
     		}
-    		
-			
     	}
+
+    	
+		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
+		catalogo.setCertificado(new String(encodedCert))
+		catalogo.setNoCertificado(empresa.numeroDeCertificado);
+		def cadena=cadenaBuilder.generarCadenaParaCatalogo(documento)
+		//log.info 'Cadena de balanza: '+cadena
+		def sello=selladorDigital.sellar(empresa.privateKey,cadena)
+		log.info 'Sello: '+sello
+		catalogo.setSello(sello)
+
+    	validarDocumento(documento)
+    	
 
 		return documento
 	}
@@ -78,7 +100,9 @@ class CatalogoDeCuentasBuilder{
 		case 11:
 			return Mes.Enum.forInt(Mes.INT_X_11);
 		case 12:
-			return Mes.Enum.forInt(Mes.INT_X_11);
+			return Mes.Enum.forInt(Mes.INT_X_12);
+		case 13:
+			return Mes.Enum.forInt(Mes.INT_X_13)
 		default:
 			return null;
 		}
@@ -92,15 +116,43 @@ class CatalogoDeCuentasBuilder{
 		return res
 	}
 
+//
+//cursor.setAttributeText(qname,"http://www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas/CatalogoCuentas_1_1.xsd" )
+/**
+*
+*xsi:schemaLocation='www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas http://www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas/CatalogoCuentas_1_1.xsd' 
+**/
 	def depurar(CatalogoDocument document){
 
 		XmlCursor cursor=document.newCursor()
 		if(cursor.toFirstChild()){
 			QName qname=new QName("http://www.w3.org/2001/XMLSchema-instance","schemaLocation","xsi")
-			cursor.setAttributeText(qname,"http://www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas/CatalogoCuentas_1_1.xsd" )
+			cursor.setAttributeText(qname,"www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas http://www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas/CatalogoCuentas_1_1.xsd" )
 			cursor.toNextToken()
 			cursor.insertNamespace("catalogocuentas", "http://www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas")
 		}
+	}
+
+
+	def validarDocumento(CatalogoDocument document) {
+		List<XmlValidationError> errores=findErrors(document)
+		if(errores.size()>0){
+		 	StringBuffer buff=new StringBuffer();
+		 	for(XmlValidationError e:errores){
+		 		buff.append(e.getMessage()+"\n");
+		 	}
+		 	throw new RuntimeException("Error de validacion en XML para el catalodo de cuentas "+buff.toString())
+		}
+		//return errores
+	}
+	
+	def findErrors(XmlObject node){
+		XmlOptions options=new XmlOptions();
+		List errors=new ArrayList();
+		options.setErrorListener(errors);
+		node.validate(options);
+		return errors;
+		
 	}
 
 }

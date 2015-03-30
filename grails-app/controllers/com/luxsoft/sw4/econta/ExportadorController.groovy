@@ -30,7 +30,7 @@ class ExportadorController {
 		def mes=1
     	def ejercicio=session.ejercicio
 		def documento=catalogoDeCuentasBuilder.build(empresa,ejercicio,mes)
-		
+
 		CatalogoLog log=new CatalogoLog(empresa:empresa,ejercicio:ejercicio,mes:mes)
 		ByteArrayOutputStream os=new ByteArrayOutputStream()
 		documento.save(os, getOptions())
@@ -132,7 +132,7 @@ class ExportadorController {
 		return options;
 	}
 
-	
+		
 
 	
 }

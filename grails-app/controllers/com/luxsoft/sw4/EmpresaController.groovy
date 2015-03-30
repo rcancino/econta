@@ -118,4 +118,32 @@ class EmpresaController {
         redirect controller:'home',action:'index'
 
     }
+
+    @Transactional
+    def registrarLlavePrivada(Empresa empresaInstance) {
+        if (empresaInstance == null) {
+            notFound()
+            return
+        }
+        def file=request.getFile('file')
+        empresaInstance.llavePrivada=file.getBytes()
+        empresaInstance.save flush:true
+        forward action: 'edit',id:empresaInstance.id
+        
+    }
+
+    @Transactional
+    def registrarCertificado(Empresa empresaInstance) {
+        if (empresaInstance == null) {
+            notFound()
+            return
+        }
+        def file=request.getFile('file')
+        
+        empresaInstance.numeroDeCertificado=file.getOriginalFilename()-'.cer'
+        empresaInstance.certificadoDigital=file.getBytes()
+        empresaInstance.save flush:true
+        forward action: 'edit',id:empresaInstance.id
+        
+    }
 }

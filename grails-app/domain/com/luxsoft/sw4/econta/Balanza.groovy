@@ -5,7 +5,7 @@ import com.luxsoft.sw4.Empresa
 class Balanza {
 
 	Empresa empresa
-	String versionSat='1.0'
+	String versionSat='1.1'
 	String rfc
 	
 	String mes

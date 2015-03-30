@@ -1,27 +1,46 @@
 package com.luxsoft.sw4.econta
 
-import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlOptions;
-import mx.luxsoft.econta.x1.BalanzaDocument;
-import mx.luxsoft.econta.x1.BalanzaDocument.Balanza;
-import mx.luxsoft.econta.x1.BalanzaDocument.Balanza.Mes;
-import mx.luxsoft.econta.x1.BalanzaDocument.Balanza.Ctas;
-import org.apache.commons.lang.math.NumberUtils
+import org.apache.xmlbeans.XmlCursor
+import org.apache.xmlbeans.XmlOptions
 
+// import mx.luxsoft.econta.x1.BalanzaDocument
+// import mx.luxsoft.econta.x1.BalanzaDocument.Balanza
+// import mx.luxsoft.econta.x1.BalanzaDocument.Balanza.Mes
+// import mx.luxsoft.econta.x1.BalanzaDocument.Balanza.Ctas
+import mx.gob.sat.esquemas.contabilidadE.x11.balanzaComprobacion.BalanzaDocument
+import mx.gob.sat.esquemas.contabilidadE.x11.balanzaComprobacion.BalanzaDocument.Balanza
+import mx.gob.sat.esquemas.contabilidadE.x11.balanzaComprobacion.BalanzaDocument.Balanza.Ctas
+import mx.gob.sat.esquemas.contabilidadE.x11.balanzaComprobacion.BalanzaDocument.Balanza.Mes
+import org.apache.commons.lang.math.NumberUtils
 import com.luxsoft.sw4.Empresa
+import groovy.xml.XmlUtil
+import javax.xml.namespace.QName
+import org.apache.xmlbeans.XmlCursor
+import org.apache.xmlbeans.XmlValidationError
+import org.apache.xmlbeans.XmlOptions
+import org.apache.xmlbeans.XmlObject
+import org.bouncycastle.util.encoders.Base64
+import org.apache.commons.logging.LogFactory
 
 class BalanzaBuilder {
 
-	static BalanzaDocument build(com.luxsoft.sw4.econta.Balanza b){
+	def selladorDigital
+
+	def cadenaBuilder
+
+	private static final log=LogFactory.getLog(this)
+
+	public BalanzaDocument build(com.luxsoft.sw4.econta.Balanza b){
 
 		BalanzaDocument document=BalanzaDocument.Factory.newInstance();
 		Balanza balanza=document.addNewBalanza();
-		balanza.setAno(b.ejercicio);
-		balanza.setMes(getMes(NumberUtils.toInt(b.mes)));
+		balanza.setVersion("1.1")
+		balanza.setAnio(b.ejercicio)
+		balanza.setMes(getMes(NumberUtils.toInt(b.mes)))
 		balanza.setRFC(b.rfc)
-		balanza.setTotalCtas(b.partidas.size())
-		balanza.setVersion(b.versionSat)
+		balanza.setTipoEnvio("N");
 
+		depurar(document)
 		b.partidas.each{
 			Ctas ctas=balanza.addNewCtas();
 			ctas.setNumCta(it.cuenta.clave)
@@ -31,17 +50,32 @@ class BalanzaBuilder {
 			ctas.setSaldoFin(it.saldoFin)
 		}
 
+		def empresa=b.empresa
+		//balanza.setFechaModBal(arg0);
+		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
+		balanza.setCertificado(new String(encodedCert))
+		balanza.setNoCertificado(empresa.numeroDeCertificado);
+		def cadena=cadenaBuilder.generarCadenaParaBalanza(document)
+		//log.info 'Cadena de balanza: '+cadena
+		def sello=selladorDigital.sellar(empresa.privateKey,cadena)
+		log.info 'Sello: '+sello
+		balanza.setSello(sello)
+
+		def errors=validarDocumento(document)
+		if(errors){
+			throw new RuntimeException("Errores de generacion de archivo XML para balanza "+errors.toString())
+		}
+
 		return document;
 	}
 
-	static BalanzaDocument cargar(com.luxsoft.sw4.econta.Balanza b){
-		ByteArrayInputStream is=new ByteArrayInputStream(b.getXml())
-		BalanzaDocument document=BalanzaDocument.Factory.parse(is)
-		return document
-	}
+	// public Mes.Enum getMes(int xmes){
+	// 	//return CCodAgrup.Enum.forInt(100);
+	// 	return Mes.Enum.forInt(xmes)
+	// }
 
 
-	static Mes.Enum getMes(int xmes){
+	Mes.Enum getMes(int xmes){
 		switch (xmes) {
 		case 1:
 			return Mes.Enum.forInt(Mes.INT_X_01);
@@ -66,13 +100,15 @@ class BalanzaBuilder {
 		case 11:
 			return Mes.Enum.forInt(Mes.INT_X_11);
 		case 12:
-			return Mes.Enum.forInt(Mes.INT_X_11);
+			return Mes.Enum.forInt(Mes.INT_X_12);
+		case 13:
+			return Mes.Enum.forInt(Mes.INT_X_13)
 		default:
 			return null;
 		}
 	}
 
-	static XmlOptions getOptions(){
+	def XmlOptions getOptions(){
 		XmlOptions options = new XmlOptions();
 		options.setCharacterEncoding("UTF-8");
 		options.put( XmlOptions.SAVE_INNER );
@@ -81,6 +117,45 @@ class BalanzaBuilder {
 		options.put( XmlOptions.SAVE_USE_DEFAULT_NAMESPACE );
 		options.put(XmlOptions.SAVE_NAMESPACES_FIRST);
 		return options;
+	}
+
+	def depurar(BalanzaDocument document){
+
+		XmlCursor cursor=document.newCursor()
+		if(cursor.toFirstChild()){
+			QName qname=new QName("http://www.w3.org/2001/XMLSchema-instance","schemaLocation","xsi")
+			cursor.setAttributeText(qname
+				,"www.sat.gob.mx/esquemas/ContabilidadE/1_1/BalanzaComprobacion http://www.sat.gob.mx/esquemas/ContabilidadE/1_1/BalanzaComprobacion/BalanzaComprobacion_1_1.xsd" )
+			cursor.toNextToken()
+			cursor.insertNamespace("BCE", " http://www.sat.gob.mx/esquemas/ContabilidadE/1_1/BalanzaComprobacion")
+		}
+	}
+
+
+	def validarDocumento(BalanzaDocument document) {
+		List<XmlValidationError> errores=findErrors(document)
+		if(errores.size()>0){
+			StringBuffer buff=new StringBuffer();
+			for(XmlValidationError e:errores){
+				buff.append(e.getMessage()+"\n");
+			}
+		}
+		return errores
+	}
+	
+	def findErrors(XmlObject node){
+		XmlOptions options=new XmlOptions();
+		List errors=new ArrayList();
+		options.setErrorListener(errors);
+		node.validate(options);
+		return errors;
+		
+	}
+
+	BalanzaDocument cargar(com.luxsoft.sw4.econta.Balanza b){
+		ByteArrayInputStream is=new ByteArrayInputStream(b.getXml())
+		BalanzaDocument document=BalanzaDocument.Factory.parse(is)
+		return document
 	}
 
 }
