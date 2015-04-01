@@ -171,7 +171,8 @@ class BalanzaController {
         response.setContentType("application/octet-stream")
         //String name="Balanza_"+"$balanza.empresa.clave"+"_$balanza.ejercicio"+"_$balanza.mes"+".xml"
         //String mes=org.apache.commons.lang.StringUtils.leftPad(balanza.mes.toString(),2,'0')
-        String name="$balanza.empresa.rfc"+"$balanza.ejercicio"+balanza.mes+"BN.xml"
+
+        String name="$balanza.empresa.rfc"+"$balanza.ejercicio"+balanza.mes+"B${balanza.tipo}.xml"
         response.setHeader("Content-disposition", "filename=$name")
         response.outputStream << balanza.xml
         return

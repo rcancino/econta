@@ -21,6 +21,8 @@ import org.apache.xmlbeans.XmlOptions
 import org.apache.xmlbeans.XmlObject
 import org.bouncycastle.util.encoders.Base64
 import org.apache.commons.logging.LogFactory
+import org.apache.xmlbeans.XmlDateTime
+import java.text.SimpleDateFormat
 
 class BalanzaBuilder {
 
@@ -38,7 +40,7 @@ class BalanzaBuilder {
 		balanza.setAnio(b.ejercicio)
 		balanza.setMes(getMes(NumberUtils.toInt(b.mes)))
 		balanza.setRFC(b.rfc)
-		balanza.setTipoEnvio("N");
+		balanza.setTipoEnvio(b.tipo);
 
 		depurar(document)
 		b.partidas.each{
@@ -52,6 +54,9 @@ class BalanzaBuilder {
 
 		def empresa=b.empresa
 		//balanza.setFechaModBal(arg0);
+		if(b.tipo=='C'){
+			balanza.setFechaModBal(toXmlDate(new Date()))
+		}
 		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
 		balanza.setCertificado(new String(encodedCert))
 		balanza.setNoCertificado(empresa.numeroDeCertificado);
@@ -156,6 +161,15 @@ class BalanzaBuilder {
 		ByteArrayInputStream is=new ByteArrayInputStream(b.getXml())
 		BalanzaDocument document=BalanzaDocument.Factory.parse(is)
 		return document
+	}
+
+	XmlDateTime toXmlDate(Date fecha){
+		Calendar c=Calendar.getInstance();
+		c.setTime(fecha)
+		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+		XmlDateTime xmlDateTime = XmlDateTime.Factory.newInstance()
+		xmlDateTime.setStringValue(df.format(c.getTime()))
+		return xmlDateTime
 	}
 
 }
