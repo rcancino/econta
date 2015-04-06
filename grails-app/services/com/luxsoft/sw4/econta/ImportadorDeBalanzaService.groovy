@@ -23,6 +23,23 @@ class ImportadorDeBalanzaService {
             case 'PAPEL':
                 importarBalanzaDePapel(empresa,ejercicio,mes)
                 break
+
+            case 'SANLIZ':
+                importarBalanzaDePapel(empresa,ejercicio,mes)
+                break
+
+             case 'I4S':
+                importarBalanzaDePapel(empresa,ejercicio,mes)
+                break
+
+            case 'SAN':
+                importarBalanzaDePapel(empresa,ejercicio,mes)
+                break
+
+            case 'SOLSAN':
+                importarBalanzaDePapel(empresa,ejercicio,mes)
+                break
+
             default:
                 break
         }

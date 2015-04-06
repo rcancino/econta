@@ -55,7 +55,7 @@ class BalanzaBuilder {
 		def empresa=b.empresa
 		//balanza.setFechaModBal(arg0);
 		if(b.tipo=='C'){
-			balanza.setFechaModBal(toXmlDate(new Date()))
+			balanza.setFechaModBal(toXmlDate(new Date()).getCalendarValue())
 		}
 		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
 		balanza.setCertificado(new String(encodedCert))
