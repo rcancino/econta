@@ -18,7 +18,8 @@ class ImportadorDeBalanzaService {
         
         switch(empresa.clave) {
             case 'IMPAP':
-                importarImpap(empresa,ejercicio,mes)
+                //importarImpap(empresa,ejercicio,mes)
+                 importarBalanzaDePapel(empresa,ejercicio,mes)
                 break
             case 'PAPEL':
                 importarBalanzaDePapel(empresa,ejercicio,mes)
