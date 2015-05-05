@@ -59,15 +59,17 @@ class CatalogoDeCuentasBuilder{
     		}
     	}
 
-    	
-		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
-		catalogo.setCertificado(new String(encodedCert))
-		catalogo.setNoCertificado(empresa.numeroDeCertificado);
-		def cadena=cadenaBuilder.generarCadenaParaCatalogo(documento)
-		//log.info 'Cadena de balanza: '+cadena
-		def sello=selladorDigital.sellar(empresa.privateKey,cadena)
-		log.info 'Sello: '+sello
-		catalogo.setSello(sello)
+		if(empresa.getCertificado()){
+			byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
+			catalogo.setCertificado(new String(encodedCert))
+			catalogo.setNoCertificado(empresa.numeroDeCertificado);
+			def cadena=cadenaBuilder.generarCadenaParaCatalogo(documento)
+			//log.info 'Cadena de balanza: '+cadena
+			def sello=selladorDigital.sellar(empresa.privateKey,cadena)
+			log.info 'Sello: '+sello
+			catalogo.setSello(sello)
+		}    	
+		
 
     	validarDocumento(documento)
     	

@@ -57,14 +57,16 @@ class BalanzaBuilder {
 		if(b.tipo=='C'){
 			balanza.setFechaModBal(toXmlDate(new Date()).getCalendarValue())
 		}
-		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
-		balanza.setCertificado(new String(encodedCert))
-		balanza.setNoCertificado(empresa.numeroDeCertificado);
-		def cadena=cadenaBuilder.generarCadenaParaBalanza(document)
-		//log.info 'Cadena de balanza: '+cadena
-		def sello=selladorDigital.sellar(empresa.privateKey,cadena)
-		log.info 'Sello: '+sello
-		balanza.setSello(sello)
+		if(empresa.getCertificado()){
+			byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
+			balanza.setCertificado(new String(encodedCert))
+			balanza.setNoCertificado(empresa.numeroDeCertificado);
+			def cadena=cadenaBuilder.generarCadenaParaBalanza(document)
+			//log.info 'Cadena de balanza: '+cadena
+			def sello=selladorDigital.sellar(empresa.privateKey,cadena)
+			log.info 'Sello: '+sello
+			balanza.setSello(sello)
+		}
 
 		def errors=validarDocumento(document)
 		if(errors){

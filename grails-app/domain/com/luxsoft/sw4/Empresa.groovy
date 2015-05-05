@@ -39,6 +39,7 @@ class Empresa {
 		numeroDeCertificado(nullable:true,minSize:1,maxSize:20)
 		certificadoDigital(nullable:true,maxSize:1024*1024*5)
 		llavePrivada(nullable:true,maxSize:1024*1024*5)
+		passwordPfx nullable:true
 		
     }
 

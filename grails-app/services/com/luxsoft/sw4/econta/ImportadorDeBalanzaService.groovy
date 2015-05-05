@@ -40,8 +40,8 @@ class ImportadorDeBalanzaService {
             case 'SOLSAN':
                 importarBalanzaDePapel(empresa,ejercicio,mes)
                 break
-
             default:
+                importarBalanzaDePapel(empresa,ejercicio,mes)
                 break
         }
 
@@ -112,7 +112,7 @@ class ImportadorDeBalanzaService {
             throw new BalanzaException(message:'Balanza ya cerrada no es modificable')
         }
 
-        def file=grailsApplication.mainContext.getResource("/WEB-INF/data/BalanzaDeComprobacionPapelSAEne15.csv").file
+        def file=grailsApplication.mainContext.getResource("/WEB-INF/data/BRGasocBalanazaFebrero2015.csv").file
         file.eachLine{line,row ->
             if(row>1){
                 println line
