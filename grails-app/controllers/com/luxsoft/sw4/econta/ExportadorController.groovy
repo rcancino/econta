@@ -27,7 +27,7 @@ class ExportadorController {
 	def exportarCatalogoDeCuentas(Empresa empresa){
 
 		//assert catalogoDeCuentasBuilder,'No se registro el CatalogoDeCuentasBuilder'
-		//def mes=1
+		def mes=3
 		//def mes=session.mes
     	def ejercicio=session.ejercicio
 		def documento=catalogoDeCuentasBuilder.build(empresa,ejercicio,mes)
