@@ -26,9 +26,11 @@
   				
   		</g:link> --}%
   	</li>
-	<li><g:link controller="exportador" action="exportarCatalogoDeCuentas" id="${session?.empresa?.id}">
+	<li>
+		<a href="#generarXmlDialog" data-toggle="modal">Generar XML</a>
+		%{-- <g:link controller="exportador" action="exportarCatalogoDeCuentas" id="${session?.empresa?.id}">
   				<i class="fa fa-file-code-o"></i></span> Generar XML 
-  		</g:link>
+  		</g:link> --}%
   	</li>
   	
 </content>
@@ -76,6 +78,7 @@
 		<g:paginate total="${cuentaInstanceCount ?: 0}"/>
 	</div>
 	<g:render template="/common/uploadFile"/>
+	<g:render template="exportadorDialog"/>
 </div>
 </content><!-- End content document -->
 

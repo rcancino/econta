@@ -29,11 +29,13 @@ class ReportController {
 		repParams['YEAR']=balanza.ejercicio.toString()
 		repParams['MES']=balanza.mes.toString()
 		repParams['EMPRESA_ID']=balanza.empresa.id
-		
+		repParams['COMPANY']=balanza.empresa.nombre
 		repParams.reportName='BalanzaDeSatEmpresarial'
+		String nombre="Balanza_"+balanza.empresa.clave+"_${balanza.ejercicio}_"+"${balanza.mes}"+".pdf"
+		println nombre
 		ByteArrayOutputStream  pdfStream=runReport(repParams)
 		render(file: pdfStream.toByteArray(), contentType: 'application/pdf'
-			,fileName:repParams.reportName)
+			,fileName:nombre)
 	}
 
 	def catalogoDecuentas(Empresa empresa){

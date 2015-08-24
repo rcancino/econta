@@ -18,6 +18,8 @@ class CuentaController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 1000, 1000)
+        params.sort='clave'
+        params.order='asc'
         def query=Cuenta.where {
             empresa==session.empresa
         }

@@ -24,15 +24,13 @@ class ExportadorController {
 	def catalogoDeCuentasBuilder
 
 
-	def exportarCatalogoDeCuentas(Empresa empresa){
+	def exportarCatalogoDeCuentas(ExportadorCommand cmd){
+		
+		def mes=cmd.mes
+    	def ejercicio=cmd.ejercicio
+		def documento=catalogoDeCuentasBuilder.build(cmd.empresa,ejercicio,mes)
 
-		//assert catalogoDeCuentasBuilder,'No se registro el CatalogoDeCuentasBuilder'
-		def mes=3
-		//def mes=session.mes
-    	def ejercicio=session.ejercicio
-		def documento=catalogoDeCuentasBuilder.build(empresa,ejercicio,mes)
-
-		CatalogoLog log=new CatalogoLog(empresa:empresa,ejercicio:ejercicio,mes:mes)
+		CatalogoLog log=new CatalogoLog(empresa:cmd.empresa,ejercicio:ejercicio,mes:mes)
 		ByteArrayOutputStream os=new ByteArrayOutputStream()
 		documento.save(os, getOptions())
 		log.xml=os.toByteArray()
@@ -136,4 +134,26 @@ class ExportadorController {
 		
 
 	
+}
+
+import grails.validation.Validateable
+
+
+@Validateable
+class ExportadorCommand{
+    
+    Empresa empresa
+    Integer mes
+    Integer ejercicio
+    
+    static constraints={
+        ejercicio inList:(2014..2018)
+        mes inList:(1..12)
+        
+    }
+
+    String toString(){
+        return " $empresa Ejercicio:$ejercicio Mes:$mes"
+    }
+
 }

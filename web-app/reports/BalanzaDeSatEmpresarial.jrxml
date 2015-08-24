@@ -290,7 +290,7 @@ $P{MES}.equals("12") ? "DICIEMBRE" :
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-BoldOblique" size="10" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[PERIODO:  DE  ENERO    A ]]></text>
+				<text><![CDATA[PERIODO:   ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -324,7 +324,7 @@ $P{MES}.equals("12") ? "DICIEMBRE" :
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-BoldOblique" size="10" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[PRUEBAxxxx]]></text>
+				<text><![CDATA[]]></text>
 				</staticText>
 			</band>
 		</pageHeader>
