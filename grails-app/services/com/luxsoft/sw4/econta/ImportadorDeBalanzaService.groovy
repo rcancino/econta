@@ -114,24 +114,25 @@ class ImportadorDeBalanzaService {
 
         //def file=grailsApplication.mainContext.getResource("/WEB-INF/data/BRGasocBalanazaJunio2015.csv").file
         //def file=grailsApplication.mainContext.getResource().file
-        
-        //def file=new File("/Users/rcancino/Documents/Kyo/OAG/OAG_C_E_Junio.csv")
-        def file=new File("/Users/rcancino/Documents/Kyo/BRC/BRG_C_E_Junio.csv")
+        //def file=new File("/Users/rcancino/Documents/Kyo/2017/OAG/OAG_C_E_Junio.csv")
+        def file=new File("/Users/rcancino/Documents/Kyo/2017/BRG/BRG_C_E_Junio.csv")
         file.eachLine{line,row ->
             if(row>1){
-                println line
+                //println 'Importando linea: '+line
                 def fields=line.split(";")
                 def cuenta=Cuenta.findByEmpresaAndClave(empresa,fields[0])
                 assert cuenta," No existe la cuenta: "+fields[0]
+
                 found.addToPartidas(cuenta:cuenta
                         ,saldoIni:fields[1]
                         ,debe:fields[2]
                         ,haber:fields[3]
                         ,saldoFin:fields[4]
                         )
-                log.info "Cuenta registrada: $cuenta.clave"
+                //log.info "Cuenta registrada: $cuenta.clave"
             }
         }
+        found.tipo='N'
         found.save failOnError:true
         return found
     }

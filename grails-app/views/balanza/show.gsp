@@ -79,7 +79,7 @@
 							</td>
 							<td>${g.formatNumber(number:row.saldoIni,type:'currency')}</td>
 
-							<td>${g.formatNumber(number:row.debe,type:'currency')}</td>
+							<td>${g.formatNumber(number:row.debe,format:'#,###,###.##')}</td>
 							<td>${g.formatNumber(number:row.haber,type:'currency')}</td>
 							<td>${g.formatNumber(number:row.saldoFin,type:'currency')}</td>
 							

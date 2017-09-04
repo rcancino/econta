@@ -57,6 +57,7 @@ class BalanzaBuilder {
 		if(b.tipo=='C'){
 			balanza.setFechaModBal(toXmlDate(new Date()).getCalendarValue())
 		}
+		/*
 		if(empresa.getCertificado()){
 			byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
 			balanza.setCertificado(new String(encodedCert))
@@ -67,7 +68,7 @@ class BalanzaBuilder {
 			log.info 'Sello: '+sello
 			balanza.setSello(sello)
 		}
-
+		*/
 		def errors=validarDocumento(document)
 		if(errors){
 			throw new RuntimeException("Errores de generacion de archivo XML para balanza "+errors.toString())
